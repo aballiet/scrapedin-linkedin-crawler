@@ -1,6 +1,8 @@
+const { system } = require('faker');
 const scrapedin = require('scrapedin')
 const configFile = require('../config.json')
 const crawl = require('./crawler')
+const client = require('./elasticConnection');
 
 const config = {
   email: process.env.SCRAPEDIN_EMAIL || configFile.email,
@@ -8,6 +10,19 @@ const config = {
   hasToLog: configFile.hasToLog,
   isHeadless: configFile.isHeadless,
   puppeteerArgs: configFile.puppeteerArgs
+}
+
+if(configFile.elasticsearch != null){
+  //======= Check that Elasticsearch is up and running =======\\
+  client.ping(
+    function(error) {
+      if (error) {
+          console.error('Elasticsearch cluster is down!');
+      } else {
+          console.log('Elasticsearch is connected');  
+      }
+    }
+  );
 }
 
 if(configFile.cookiesFile && configFile.cookiesFile.length) {

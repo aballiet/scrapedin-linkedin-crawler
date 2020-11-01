@@ -62,3 +62,6 @@ typings/
 
 # cookies files
 cookies.txt
+
+#config file
+config.json
